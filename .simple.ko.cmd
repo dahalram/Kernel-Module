@@ -1,0 +1,1 @@
+cmd_/home/ram/Desktop/Kernel-Module/simple.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/ram/Desktop/Kernel-Module/simple.ko /home/ram/Desktop/Kernel-Module/simple.o /home/ram/Desktop/Kernel-Module/simple.mod.o ;  true
