@@ -17,13 +17,16 @@ struct birthday {
 	struct hlist_node my_hash_list;
 };
 
-#define HASH_TABLE(birthday_hash, BITS)	\
-	struct hlist_head birthday_hash[1 << (BITS)] =	\ 
+#define HASH_TABLE(birthday_hash, BITS)\
+	struct hlist_head birthday_hash[1 << (BITS)] =\ 
 		{ [0 ... ((1 << (BITS)) -1)] = HLIST_HEAD_INIT}
 
-#define hash_add_rcu(hashtable, node, key)	\
+DEFINE_HASHTABLE(a, BITS);
+
+#define hash_add_rcu(hashtable, node, key)\
 	hlist_add_head_rcu(node, &hashtable[hash_min(key, HASH_BITS(hashtable))])
 
+/*
 struct birthday first = {
 	.name = "abcd",
 	.day = 1,
@@ -63,8 +66,28 @@ struct birthday fifth = {
 	.year = 1990,
 	.my_hash_list = 0
 };
+*/
+
 
 static int birthday_hash_init (void) {
+	struct birthday *first, *second, *third, *fourth, *fifth, *tmp;
+
+	first = kmalloc(sizeof *first, GFP_KERNEL);
+	if (!first) { printk("can't allocate memory"); return -ENOMEM; }
+
+	second = kmalloc(sizeof *second, GFP_KERNEL);
+
+	hash_add(a, &first->my_hash_list, first->name);
+	hash_add(a, &second->my_hash_list, second->name);
+	hash_add(a, &third->my_hash_list, third->name);
+	hash_add(a, &fourth->my_hash_list, fourth->name);
+	hash_add(a, &fifth->my_hash_list, fifth->name);
+
+	int i = 0;
+
+	hash_for_each(a, i, tmp, my_hash_list) {
+		printk(KERN INFO "name=%s is in bucket %d\n", h1->name, i);
+	}
 
 	return 0;
 }
