@@ -1,15 +1,16 @@
-#include <linux/module.h>
-#include <linux/init.h>
-#include <linux/types.h>
-#include <linux/kernel.h>
-#include <linux/list.h>
-#include <linux/types.h>
-#include <linux/slab.h>
-#include <linux/hashtable.h>
+#include <linux/module.h> // Needed for all modules
+#include <linux/init.h>	  // Needed for macros
+#include <linux/types.h>   // Needed for list macros
+#include <linux/kernel.h>  // Needed for KERN_INFO
+#include <linux/list.h>    // Needed for linked list
+#include <linux/types.h>   // Needed for list macros
+#include <linux/slab.h>    // Needed for kernel
+#include <linux/hashtable.h> // Needed for hashtable
 
 //#define NUM_OF_BIRTHDAYS 5
 #define BITS 3
 
+// Birthday struct
 struct birthday {
 	char name[100];
 	int day;
@@ -18,6 +19,21 @@ struct birthday {
 	struct hlist_node my_hash_list;
 };
 
+/*
+struct bucket {
+	struct hlist_head *head;
+	int len = 2;
+};
+
+struct HashTable {
+	unsigned int size;
+	bucket *b_head; // Head of the bucket/doubly linked list
+} HashTab;
+
+HashTab *make_HashTable (unsigned int size) {
+
+}
+*/
 /*#define HASH_TABLE(birthday_hash, BITS)\
 	struct hlist_head birthday_hash[1 << (BITS)] =\ 
 		{ [0 ... ((1 << (BITS)) -1)] = HLIST_HEAD_INIT}
@@ -132,6 +148,7 @@ static void birthday_hash_clean(void) {
 	printk(KERN_INFO "Removing module\n");
 }
 
+// Macros for registering module entry and exit points
 module_init(birthday_hash_init);
 module_exit(birthday_hash_clean);
 
