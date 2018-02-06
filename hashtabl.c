@@ -24,7 +24,45 @@ struct birthday {
 #define hash_add_rcu(hashtable, node, key)	\
 	hlist_add_head_rcu(node, &hashtable[hash_min(key, HASH_BITS(hashtable))])
 
-struct birthday *person;
+struct birthday first = {
+	.name = "abcd",
+	.day = 1,
+	.month = 12,
+	.year = 1990,
+	.my_hash_list = 0
+};
+
+struct birthday second = {
+	.name = "abcde",
+	.day = 15,
+	.month = 12,
+	.year = 1995,
+	.my_hash_list = 0
+};
+
+struct birthday third = {
+	.name = "abcd",
+	.day = 12,
+	.month = 12,
+	.year = 1990,
+	.my_hash_list = 0
+};
+
+struct birthday fourth = {
+	.name = "abcdef",
+	.day = 15,
+	.month = 1,
+	.year = 1996,
+	.my_hash_list = 0
+};
+
+struct birthday fifth = {
+	.name = "abcdef",
+	.day = 21,
+	.month = 2,
+	.year = 1990,
+	.my_hash_list = 0
+};
 
 static int birthday_hash_init (void) {
 
