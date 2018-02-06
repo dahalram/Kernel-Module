@@ -6,18 +6,23 @@
 #include <linux/types.h>
 #include <linux/slab.h>
 
-#define NUM_OF_BIRTHDAYS 6
- 
+#define NUM_OF_BIRTHDAYS 5
+#define BITS 3
 
 struct birthday {
 	char name[100];
 	int day;
 	int month;
 	int year;
-	struct list_head list;
-}
+	struct hlist_node my_hash_list;
+};
 
-static LIST_HEAD (birthday_list);
+#define HASH_TABLE(birthday_hash, BITS)	\
+	struct hlist_head birthday_hash[1 << (BITS)] =	\ 
+		{ [0 ... ((1 << (BITS)) -1)] = HLIST_HEAD_INIT}
+
+#define hash_add_rcu(hashtable, node, key)	\
+	hlist_add_head_rcu(node, &hashtable[hash_min(key, HASH_BITS(hashtable))])
 
 struct birthday *person;
 
