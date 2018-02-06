@@ -5,8 +5,9 @@
 #include <linux/list.h>
 #include <linux/types.h>
 #include <linux/slab.h>
+#include <linux/hashtable.h>
 
-#define NUM_OF_BIRTHDAYS 5
+//#define NUM_OF_BIRTHDAYS 5
 #define BITS 3
 
 struct birthday {
@@ -17,15 +18,17 @@ struct birthday {
 	struct hlist_node my_hash_list;
 };
 
-#define HASH_TABLE(birthday_hash, BITS)\
+/*#define HASH_TABLE(birthday_hash, BITS)\
 	struct hlist_head birthday_hash[1 << (BITS)] =\ 
 		{ [0 ... ((1 << (BITS)) -1)] = HLIST_HEAD_INIT}
-
+*/
 DEFINE_HASHTABLE(a, BITS);
 
+/*
 #define hash_add_rcu(hashtable, node, key)\
 	hlist_add_head_rcu(node, &hashtable[hash_min(key, HASH_BITS(hashtable))])
 
+*/
 /*
 struct birthday first = {
 	.name = "abcd",
@@ -76,6 +79,39 @@ static int birthday_hash_init (void) {
 	if (!first) { printk("can't allocate memory"); return -ENOMEM; }
 
 	second = kmalloc(sizeof *second, GFP_KERNEL);
+	third = kmalloc(sizeof *third, GFP_KERNEL);
+	fourth = kmalloc(sizeof *fourth, GFP_KERNEL);
+	fifth = kmalloc(sizeof *fifth, GFP_KERNEL);
+
+	//memcpy(first->name, "a", 1);
+	first->name = "a";
+	first->day = 1;
+	first->month = 1;
+	first->year = 2001;
+
+	//memcpy(second->name, "ba", 2);
+	second->name = "ba";
+	second->day = 2;
+	second->month = 2;
+	second->year = 2002;
+
+	//memcpy(third->name, "cbc", 3);
+	third->name = "cba";
+	third->day = 3;
+	third->month = 3;
+	third->year = 2003;
+
+	//memcpy(fourth->name, "dbcd", 4);
+	fourth->name = "dcba";	
+	fourth->day = 4;
+	fourth->month = 4;
+	fourth->year = 2004;
+
+	//memcpy(fifth->name, "ebcde", 5);
+	fifth->name = "edcba";
+	fifth->day = 5;
+	fifth->month = 5;
+	fifth->year = 2005;
 
 	hash_add(a, &first->my_hash_list, first->name);
 	hash_add(a, &second->my_hash_list, second->name);
@@ -86,14 +122,14 @@ static int birthday_hash_init (void) {
 	int i = 0;
 
 	hash_for_each(a, i, tmp, my_hash_list) {
-		printk(KERN INFO "name=%s is in bucket %d\n", h1->name, i);
+		printk(KERN_INFO "name=%s is in bucket %d\n", first->name, i);
 	}
 
 	return 0;
 }
 
 static void birthday_hash_clean(void) {
-
+	printk(KERN_INFO "Removing module\n");
 }
 
 module_init(birthday_hash_init);

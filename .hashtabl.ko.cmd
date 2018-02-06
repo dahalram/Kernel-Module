@@ -1,0 +1,1 @@
+cmd_/home/ram/Desktop/Kernel-Module/hashtabl.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/ram/Desktop/Kernel-Module/hashtabl.ko /home/ram/Desktop/Kernel-Module/hashtabl.o /home/ram/Desktop/Kernel-Module/hashtabl.mod.o ;  true
