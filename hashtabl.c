@@ -5,10 +5,10 @@
 #include <linux/list.h>    // Needed for linked list
 #include <linux/types.h>   // Needed for list macros
 #include <linux/slab.h>    // Needed for kernel
-#include <linux/hashtable.h> // Needed for hashtable
+//#include <linux/hashtable.h> // Needed for hashtable
 
 //#define NUM_OF_BIRTHDAYS 5
-#define BITS 3
+#define TABLE_SIZE 10
 
 // Birthday struct
 struct birthday {
@@ -19,21 +19,44 @@ struct birthday {
 	struct hlist_node my_hash_list;
 };
 
-/*
+
 struct bucket {
-	struct hlist_head *head;
-	int len = 2;
+	struct list_head b_head; // list_head for each bucket
+	struct list_head h_head; // for hashing buckets
+	unsigned int key;
 };
+
+unsigned int name_hash(unsigned char *str) {
+	int ch;
+	unsigned long hash = 0;
+	while (ch == *str++) {
+		hash = (hash << 8) + ch;
+	}
+	return hash % TABLE_SIZE;
+}
 
 struct HashTable {
 	unsigned int size;
-	bucket *b_head; // Head of the bucket/doubly linked list
-} HashTab;
+	struct hlist_head *list_head;
+};
 
-HashTab *make_HashTable (unsigned int size) {
+static struct HashTable birthday_table;
+
+//TODO
+static void traverse_ht(void) {
 
 }
-*/
+
+//TODO
+struct birthday *set_name_as_key(const char *key) {
+
+}
+
+// TODO
+static void new_table(unsigned int bdays) {
+
+}
+
 /*#define HASH_TABLE(birthday_hash, BITS)\
 	struct hlist_head birthday_hash[1 << (BITS)] =\ 
 		{ [0 ... ((1 << (BITS)) -1)] = HLIST_HEAD_INIT}
