@@ -42,14 +42,26 @@ struct HashTable {
 
 static struct HashTable birthday_table;
 
-//TODO
 static void traverse_ht(void) {
-
+	struct hlist_node *h1;
+	unsigned int i;
+	for (i = 0; i < birthday_table.size; i++) {
+		hlist_for_each(h1, &(birthday_table.list_head[i])) {
+			struct birthday *b = hlist_entry(h1, struct birthday, my_hash_list);
+			printk("Name:%s, day:%d, month:%d, year:%d is in bucket %d", b->name, b->day, b->month, b->year, i);
+		}
+	}
 }
 
-//TODO
 struct birthday *set_name_as_key(const char *key) {
-
+	unsigned int hashind = name_hash(key);
+	struct hlist_node *h1;
+	hlist_for_each(h1, &(birthday_table.list_head[hashind])) {
+		struct birthday *b = hlist_entry(h1, struct birthday, my_hash_list);
+		if (strncmp(b->name, key) != 0) 
+			return b;
+	}
+	return NULL;
 }
 
 // TODO
