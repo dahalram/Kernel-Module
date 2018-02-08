@@ -19,12 +19,13 @@ struct birthday {
 	struct hlist_node my_hash_list;
 };
 
-
+/*
 struct bucket {
 	struct list_head b_head; // list_head for each bucket
 	struct list_head h_head; // for hashing buckets
 	unsigned int key;
 };
+*/
 
 unsigned int name_hash(unsigned char *str) {
 	int ch;
@@ -64,23 +65,36 @@ struct birthday *set_name_as_key(const char *key) {
 	return NULL;
 }
 
-// TODO
-static void new_table(unsigned int bdays) {
-
+static void make_new_table(unsigned int n) {
+	struct hlist_head *h1;
+	h1 = kmalloc(sizeof(*h1) * n, GFP_KERNEL);
+	unsigned int i;
+	if (h1 != NULL) {
+		for (i = 0; i < n; i++) {
+			INIT_HLIST_HEAD(&h1[i]);
+		}
+	}
+	birthday_table.list_head = h1;
+	birthday_table.size = n;
 }
 
 /*#define HASH_TABLE(birthday_hash, BITS)\
 	struct hlist_head birthday_hash[1 << (BITS)] =\ 
 		{ [0 ... ((1 << (BITS)) -1)] = HLIST_HEAD_INIT}
 */
-DEFINE_HASHTABLE(a, BITS);
+//DEFINE_HASHTABLE(a, BITS);
 
 /*
 #define hash_add_rcu(hashtable, node, key)\
 	hlist_add_head_rcu(node, &hashtable[hash_min(key, HASH_BITS(hashtable))])
 
 */
-/*
+
+static void birthday_hash_add(struct birthday b) {
+	unsigned int hashind = name_hash(b.name);
+	hlist_add_head(&b.my_hash_list, &(birthday_table.list_head[hashind]));
+}
+
 struct birthday first = {
 	.name = "abcd",
 	.day = 1,
@@ -120,11 +134,9 @@ struct birthday fifth = {
 	.year = 1990,
 	.my_hash_list = 0
 };
-*/
-
 
 static int birthday_hash_init (void) {
-	struct birthday *first, *second, *third, *fourth, *fifth, *tmp;
+	/*struct birthday *first, *second, *third, *fourth, *fifth, *tmp;
 
 	first = kmalloc(sizeof *first, GFP_KERNEL);
 	if (!first) { printk("can't allocate memory"); return -ENOMEM; }
@@ -162,24 +174,30 @@ static int birthday_hash_init (void) {
 	fifth->name = "edcba";
 	fifth->day = 5;
 	fifth->month = 5;
-	fifth->year = 2005;
+	fifth->year = 2005; */
+	unsigned int n = 5;
 
-	hash_add(a, &first->my_hash_list, first->name);
-	hash_add(a, &second->my_hash_list, second->name);
-	hash_add(a, &third->my_hash_list, third->name);
-	hash_add(a, &fourth->my_hash_list, fourth->name);
-	hash_add(a, &fifth->my_hash_list, fifth->name);
+	make_new_table(n);
 
-	int i = 0;
+	birthday_hash_add(first);
+	birthday_hash_add(second);
+	birthday_hash_add(third);
+	birthday_hash_add(fourth);
+	birthday_hash_add(fifth);
+
+	traverse_ht();
+
+	/*int i = 0;
 
 	hash_for_each(a, i, tmp, my_hash_list) {
 		printk(KERN_INFO "name=%s is in bucket %d\n", first->name, i);
-	}
+	}*/
 
 	return 0;
 }
 
 static void birthday_hash_clean(void) {
+	kfree(birthday_table.list_head);
 	printk(KERN_INFO "Removing module\n");
 }
 
