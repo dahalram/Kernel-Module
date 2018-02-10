@@ -27,21 +27,21 @@ struct bucket {
 };
 */
 
-unsigned int name_hash(unsigned char *str) {
-	int ch;
-	unsigned long hash = 0;
-	while (ch == *str++) {
-		hash = (hash << 8) + ch;
-	}
-	return hash % TABLE_SIZE;
-}
-
 struct HashTable {
 	unsigned int size;
 	struct hlist_head *list_head;
 };
 
 static struct HashTable birthday_table;
+
+unsigned int name_hash(const char *str) {
+	int ch;
+	unsigned long hash = 0;
+	while ((ch == *str++)) {
+		hash = (hash << 8) + ch;
+	}
+	return hash % birthday_table.size;
+}
 
 static void traverse_ht(void) {
 	struct hlist_node *h1;
@@ -59,7 +59,7 @@ struct birthday *set_name_as_key(const char *key) {
 	struct hlist_node *h1;
 	hlist_for_each(h1, &(birthday_table.list_head[hashind])) {
 		struct birthday *b = hlist_entry(h1, struct birthday, my_hash_list);
-		if (strncmp(b->name, key) != 0) 
+		if (!strncmp(b->name, key, 101)) 
 			return b;
 	}
 	return NULL;
@@ -100,7 +100,7 @@ struct birthday first = {
 	.day = 1,
 	.month = 12,
 	.year = 1990,
-	.my_hash_list = 0
+	//.my_hash_list = 0
 };
 
 struct birthday second = {
@@ -108,7 +108,7 @@ struct birthday second = {
 	.day = 15,
 	.month = 12,
 	.year = 1995,
-	.my_hash_list = 0
+	//.my_hash_list = 0
 };
 
 struct birthday third = {
@@ -116,7 +116,7 @@ struct birthday third = {
 	.day = 12,
 	.month = 12,
 	.year = 1990,
-	.my_hash_list = 0
+	//.my_hash_list = 0
 };
 
 struct birthday fourth = {
@@ -124,7 +124,7 @@ struct birthday fourth = {
 	.day = 15,
 	.month = 1,
 	.year = 1996,
-	.my_hash_list = 0
+	//.my_hash_list = 0
 };
 
 struct birthday fifth = {
@@ -132,7 +132,7 @@ struct birthday fifth = {
 	.day = 21,
 	.month = 2,
 	.year = 1990,
-	.my_hash_list = 0
+	//.my_hash_list = 0
 };
 
 static int birthday_hash_init (void) {

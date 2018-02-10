@@ -107,6 +107,7 @@ deps_/home/ram/Desktop/Kernel-Module/hashtabl.mod.o := \
   arch/x86/include/asm/disabled-features.h \
     $(wildcard include/config/x86/intel/mpx.h) \
     $(wildcard include/config/x86/intel/memory/protection/keys.h) \
+    $(wildcard include/config/page/table/isolation.h) \
   include/asm-generic/bitops/const_hweight.h \
   include/asm-generic/bitops/le.h \
   arch/x86/include/uapi/asm/byteorder.h \
@@ -284,6 +285,7 @@ deps_/home/ram/Desktop/Kernel-Module/hashtabl.mod.o := \
   include/asm-generic/atomic-long.h \
   include/linux/static_key.h \
   arch/x86/include/asm/paravirt.h \
+    $(wildcard include/config/debug/entry.h) \
   arch/x86/include/asm/frame.h \
   arch/x86/include/asm/special_insns.h \
   arch/x86/include/asm/fpu/types.h \
@@ -487,6 +489,7 @@ deps_/home/ram/Desktop/Kernel-Module/hashtabl.mod.o := \
     $(wildcard include/config/provide/ohci1394/dma/init.h) \
     $(wildcard include/config/pci/mmconfig.h) \
     $(wildcard include/config/x86/intel/mid.h) \
+    $(wildcard include/config/acpi/apei/ghes.h) \
     $(wildcard include/config/intel/txt.h) \
   arch/x86/include/asm/acpi.h \
     $(wildcard include/config/acpi/apei.h) \
@@ -589,6 +592,7 @@ deps_/home/ram/Desktop/Kernel-Module/hashtabl.mod.o := \
     $(wildcard include/config/ppc64.h) \
   include/linux/rbtree_latch.h \
   arch/x86/include/asm/module.h \
+    $(wildcard include/config/unwinder/orc.h) \
     $(wildcard include/config/m486.h) \
     $(wildcard include/config/m586.h) \
     $(wildcard include/config/m586tsc.h) \
@@ -615,6 +619,7 @@ deps_/home/ram/Desktop/Kernel-Module/hashtabl.mod.o := \
     $(wildcard include/config/have/mod/arch/specific.h) \
     $(wildcard include/config/modules/use/elf/rel.h) \
     $(wildcard include/config/modules/use/elf/rela.h) \
+  arch/x86/include/asm/orc_types.h \
   include/linux/vermagic.h \
   include/generated/utsrelease.h \
 
